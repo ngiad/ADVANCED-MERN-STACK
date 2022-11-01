@@ -1,6 +1,6 @@
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-
+import bcrypt from "bcryptjs"
 
 const generateToken = (id) => {
     return jwt.sign({id},process.env.JWT_SECRET,{
@@ -63,8 +63,6 @@ export const registerUser = async(req,res,next) => {
                 email,
                 photo,
                 phone,
-                password,
-                token,
                 bio
             })
 
@@ -80,7 +78,51 @@ export const registerUser = async(req,res,next) => {
 
 export const loginUser = async(req,res,next) => {
     try {
-        res.send("Login user")
+        const { email , password} = req.body
+
+        // Validate Request
+        if(!email || !password){
+            res.status(400)
+            throw new Error("Please add email and pasword")
+        }
+
+        const user = await userModel.findOne({email})
+
+        if(!user){
+            res.status(400)
+            throw new Error("User not found,please signup")
+        }
+
+        const passwordIsCorrect = await bcrypt.compare(password,user.password)
+
+        // Genereta Token
+        const token = generateToken(user._id)
+
+
+        // Send HTTP-only cookie
+        res.cookie("token", token,{
+            path : "/",
+            httpOnly : true,
+            expires :  new Date(Date.now() + 1000 * 86400), // 1 day
+            sameSite : "none",
+            secure : true
+        })
+
+        if(user && passwordIsCorrect) {
+            const {_id, name , email ,photo , phone , bio} = user
+            
+            res.status(200).json({
+                _id,
+                name,
+                email,
+                photo,
+                phone,
+                bio
+            })
+        }else{
+            res.status(400)
+            throw new Error("Invalid user data")
+        }
     } catch (error) {
         res.status(400)
         next(error)
