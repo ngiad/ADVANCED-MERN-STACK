@@ -3,6 +3,7 @@ import express from "express"
 import mongoose from "mongoose"
 import bodyParser from "body-parser"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 import { errorHandler } from "./middleWare/errorMiddleware.js"
 
@@ -16,6 +17,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({extended : false}))
 app.use(bodyParser.json())
 
