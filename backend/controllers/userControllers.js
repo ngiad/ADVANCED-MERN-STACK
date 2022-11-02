@@ -172,3 +172,27 @@ export const getUser =  async(req,res,next) => {
         next(error)
     }
 }
+
+
+export const loginStauts = async(req,res,next) =>{
+    try {
+        const token = req.cookies.token
+        console.log(req.cookies);
+        if(!token){
+            return res.json({login : false})
+        }
+
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+
+        if(!verified){
+            res.status(400)
+            throw new Error("User not found")
+        }else{
+            res.status(200).json({login : true})
+        }
+
+    } catch (error) {
+        res.status(400)
+        next(error)
+    }
+}
