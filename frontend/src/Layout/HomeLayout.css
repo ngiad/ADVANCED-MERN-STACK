@@ -1,0 +1,163 @@
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --front-Logo : sans-serif;
+    --bg--homePage : #030b6b ;
+    --btn-primary: #007bff;
+    --front-text : sans-serif;
+}
+
+.MainHomeLayout{
+    color: #fff;
+    background-color: var(--bg--homePage);
+    height: 100vh;
+}
+
+.MainHeaderHomepage{
+    color: #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
+    align-items: center;
+}
+
+.leftHomeHeader > h1{
+    font-family: var(--front-Logo);
+    padding: 4px;
+    border: 4px #fff solid;
+    border-radius: 50% ;
+    width: 52px;
+    text-align: center;
+}
+
+.RightHomeHeader > .RightHomeHeader_Dashboard{
+    color: #fff;
+    transition: all .2s;
+    background-color: var(--btn-primary);
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.RightHomeHeader > .RightHomeHeader_Dashboard:hover,
+.RightHomeHeader_Register:hover,
+.RightHomeHeader_Login:hover{
+    transform: scale(1.25);
+}
+
+.RightHomeHeader_Register{
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: all .2s;
+    background-color: var(--bg--homePage);
+}
+
+.RightHomeHeader_Login{
+    color: #fff;
+    transition: all .2s;
+    background-color: var(--btn-primary);
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.ContenerHomePage{
+    display: flex;
+    justify-content: center;
+}
+
+.ContenerHomePage .content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--front-text);
+}
+
+.ContenerHomePage .content .HomepageLeft{
+    flex: 1;
+    max-width: 400px;
+}
+
+.ContenerHomePage h2{
+    font-size: 32px;
+}
+
+.ContenerHomePage .HomepageLeft > p{
+    margin: 24px 0;
+}
+
+.PostLeft {
+    display: flex;
+}
+
+.contentPost{
+    margin: 0 12px 0 0;
+}
+
+.contentPostTop{
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.contentPostBottom{
+    font-size: 13px;
+}
+
+.ContenerHomePage .content .HomepageRight{
+    flex: 1;
+}
+
+.ContenerHomePage .content .HomepageRight >img{
+    max-width: 100%;
+}
+
+.FooterHomepage{
+    color: #fff;
+    font-size: 13px;
+    font-family: sans-serif;
+    text-align: center;
+    opacity: 0.7;
+    margin-top: 40px;
+}
+
+.boderText{
+    border: 1px solid #fff;
+    max-width: max-content;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.boderText:hover{
+    transform: translateY(-4px);
+}
+
+
+@media only screen and (max-width: 768px){
+    .ContenerHomePage .content{
+        padding: 10px;
+        flex-direction: column;
+    }
+
+    .ContenerHomePage .content .HomepageLeft{
+        text-align: center;
+    }
+
+    .PostLeft{
+        justify-content: center;
+    }
+
+}
