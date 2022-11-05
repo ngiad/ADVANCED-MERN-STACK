@@ -1,0 +1,95 @@
+.MainContenerLayout{
+    display: flex;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100&family=Lexend:wght@500&display=swap');
+
+/* font-family: 'Be Vietnam Pro', sans-serif; */
+
+.contener{
+    height: 100vh;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 700;
+    background-color: #030b6b;
+    padding: 8px;
+    width: 150px;
+}
+
+.logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    margin-bottom: 24px;
+}
+
+.logoleft h1{
+    font-size: 32px;
+    font-family: var(--front-Logo);
+    padding: 4px;
+    border: 4px #fff solid;
+    border-radius: 50% ;
+    width: 52px;
+    text-align: center;
+}
+
+.contener{
+    border-radius: 0 12px 12px 0;
+    margin-right: 12px;
+}
+
+.contener .normal{
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-decoration: none;
+}
+
+.HeaderContenerleft{
+    width: 100%;
+}
+
+.option ul{
+    list-style: none;
+}
+
+.option ul li{
+    margin: 12px 0;
+    padding: 4px 24px 4px 0;
+}
+
+
+.contenerContenerLayout{
+    width: 100%;
+}
+
+
+.MainHeaderContener{
+    margin-right: 12px;
+    display: flex;
+    padding: 8px;
+    border-bottom: 2px solid #ccc;
+    align-items: center;
+}
+
+.HeaderContenerright button{
+    border: none;
+    background-color: rgb(236, 169, 44);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.HeaderContenerright button:hover{
+    transform: translateY(-5px);
+}
+
+
+
+
+

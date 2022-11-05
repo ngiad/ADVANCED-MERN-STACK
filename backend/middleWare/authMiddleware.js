@@ -4,7 +4,7 @@ import userModel from "../models/userModel.js"
 
 export const protect = async (req,res,next) =>{
     try {
-        const token = req.cookies.token
+        const token = req.headers.token
 
         if(!token) {
             res.status(400)
