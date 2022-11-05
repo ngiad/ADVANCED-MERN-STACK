@@ -21,7 +21,7 @@ const HeaderHomepage = () => {
       const data = await res.data
       setLoginStatus(data.login)
     } catch (error) {
-      toast.warning("warning")
+      toast.warning(error.response.data.message)
     }
   }
 

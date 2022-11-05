@@ -19,7 +19,7 @@ const HeaderContener = () => {
 
       toast.success(data.message)
     } catch (error) {
-      toast.warning("warning")
+      toast.warning(error.response.data.message)
     }
   }
 

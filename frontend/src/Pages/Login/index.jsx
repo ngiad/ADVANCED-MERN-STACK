@@ -52,7 +52,7 @@ const Login = () => {
           })
         }
     } catch (error) {
-      toast.warning("User not found")
+      toast.warning(error.response.data.message)
     }
   }
 
