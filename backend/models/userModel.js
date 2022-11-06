@@ -31,6 +31,15 @@ const userShema = mongoose.Schema({
         type :  String,
         required : [true, "Please add your phone"]
     },
+    shop :[{
+        products :{
+            image : String,
+            name : String,
+            price : Number,
+            describe : String,
+            amount : Number
+        }
+    }],
     bio : {
         type :  String,
         maxlength : [200," Bio must not be up more than 200 characters"],

@@ -1,0 +1,35 @@
+.MainAddProduct .AddProduct{
+    font-family: 'Be Vietnam Pro' ;
+    margin: 24px 0;
+}
+
+.contenerAddProduct form{
+    font-family: 'Be Vietnam Pro';
+    display: flex;
+    flex-direction: column;
+    max-width: 550px;
+    margin: 0 12px;
+}
+
+.contenerAddProduct form label{
+    font-weight: 600;
+    margin: 12px 0;
+}
+
+.contenerAddProduct form input{
+    padding: 8px;
+}
+
+.contenerAddProduct form button{
+    background-color: red;
+    color: #fff;
+    padding: 8px;
+    width: 80px;
+    border: none;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.srcImage{
+    max-width: 100px;
+}

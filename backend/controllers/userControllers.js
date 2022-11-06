@@ -57,7 +57,7 @@ export const registerUser = async(req,res,next) => {
 
 
         if(user){
-            const {_id, name , email ,photo , phone , bio} = user
+            const {_id, name ,shop, email ,photo , phone , bio} = user
             
             res.status(201).json({
                 _id,
@@ -66,6 +66,7 @@ export const registerUser = async(req,res,next) => {
                 photo,
                 phone,
                 token,
+                shop,
                 bio
             })
 
@@ -112,7 +113,7 @@ export const loginUser = async(req,res,next) => {
         })
 
         if(user && passwordIsCorrect) {
-            const {_id, name , email ,photo , phone , bio} = user
+            const {_id, shop, name , email ,photo , phone , bio} = user
             
             res.status(200).json({
                 _id,
@@ -121,6 +122,7 @@ export const loginUser = async(req,res,next) => {
                 photo,
                 phone,
                 token,
+                shop,
                 bio
             })
         }else{
@@ -263,7 +265,7 @@ export const UpdatePassword = async(req,res,next) =>{
 
         user.save()
 
-        const { name , email ,photo , phone , bio } = user
+        const { name , email ,photo , phone , bio, shop } = user
         
         res.cookie("token", token,{
             path : "/",
@@ -274,7 +276,7 @@ export const UpdatePassword = async(req,res,next) =>{
         })
 
         res.status(200).json({
-            name , email ,photo , phone , bio, token
+            name , email ,photo , phone , bio, token, shop
         })
 
 
@@ -282,4 +284,9 @@ export const UpdatePassword = async(req,res,next) =>{
         res.status(400)
         next(error);
     }
+}
+
+export const createShop = async(req,res,next) => {
+    console.log(req.body);
+    res.send("ok")
 }
