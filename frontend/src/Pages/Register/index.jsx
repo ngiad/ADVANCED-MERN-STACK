@@ -70,7 +70,7 @@ const Register = () => {
                 </form>
             </div>
             <div className="bottomloginForm">
-                <p className='bottomloginForm_top'>Forgot Password</p>
+                <p  onClick={() => Navigate("/forgotPassword")} className='bottomloginForm_top'>Forgot Password</p>
                 <p className='textbottomloginForm_bottom'>
                     <span onClick={() => Navigate("/")}>Home</span>
                     <span onClick={() => Navigate("/register")}>Don`t have an account ?</span>

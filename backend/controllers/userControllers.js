@@ -1,6 +1,8 @@
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+
 
 const generateToken = (id) => {
     return jwt.sign({id},process.env.JWT_SECRET,{
@@ -196,5 +198,88 @@ export const loginStauts = async(req,res,next) =>{
     } catch (error) {
         res.status(400)
         next(error)
+    }
+}
+
+export const ForgotPassword = async(req,res,next) =>{
+    try {
+        const user = await userModel.findOne({email : req.body.email})
+        if(!user){
+            res.status(400)
+            throw new Error("User not found")
+        }
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+              user: "devwebdainghia@gmail.com",
+              pass: "imhfjpfebidvwoet",
+            },
+          });
+        
+        const token = generateToken(user._id)
+
+        await transporter.sendMail(
+            {
+              from: "devwebdainghia@gmail.com",
+              to: `${user.email}`,
+              subject: "Forgot Password",
+              text: `Forgot Password at url ${"http://localhost:3000/forgotPassword/"+token} one day limit`,
+            },
+            (err) => {
+              if (err){
+                res.status(400)
+                throw new Error("Email not found")
+              }
+            }
+          );  
+         res.json({success : true}) 
+    } catch (error) {
+        res.status(400)
+        next(error);
+    }
+}
+
+export const UpdatePassword = async(req,res,next) =>{
+    const { token,password,confirmPassword } = req.body
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+
+        const user = await userModel.findById({_id : verified.id})
+
+        if(!user){
+            res.status(400)
+            throw new Error("User not found")
+        }
+
+        if(password !== confirmPassword){
+            res.status(400)
+            throw new Error("Check confirm password")
+        }
+        
+
+        Object.assign(user,{
+            ...user,password : password
+        })
+
+        user.save()
+
+        const { name , email ,photo , phone , bio } = user
+        
+        res.cookie("token", token,{
+            path : "/",
+            httpOnly : true,
+            expires :  new Date(Date.now() + 1000 * 86400), // 1 day
+            sameSite : "none",
+            secure : true
+        })
+
+        res.status(200).json({
+            name , email ,photo , phone , bio, token
+        })
+
+
+    } catch (error) {
+        res.status(400)
+        next(error);
     }
 }
