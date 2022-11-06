@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import HeaderContener from '../../Component/HeaderContener'
@@ -15,22 +15,20 @@ const AddProduct = () => {
     describe : "",
     amount : ""
   })
+
   const [fileData,setFileData] = useState()
-  const [srcImage ,setSrcImage] = useState()
+  const [Urlfile, setUrlFile] = useState();
 
-  const fileChange = async(e) =>{
+  const fileChange = (e) =>{
+    setUrlFile(URL.createObjectURL(e.target.files[0]));
     setFileData(e.target.files[0])
-    const image =  new FormData()
-    image.append("image",fileData)
-
-    try {
-      const res = await Requestbase.post("single",image)
-      const data = await res.data
-      setSrcImage(data.img)
-    } catch (error) {
-      toast.warning(error.response.data.message)
-    }
   }
+
+  useEffect(() => {
+    return () =>{
+      URL.revokeObjectURL(Urlfile)
+    }
+  },[fileData])
 
   const handleChangInput =  (e) => {
     setNewProduct({...NewPropduct,[e.target.id] : e.target.value })
@@ -45,14 +43,33 @@ const AddProduct = () => {
       return toast.warning("Product anmoun & Product price is not number")
     }
 
+    if(!price || !amount || !describe || !name){
+      return toast.warning("Fill in all information before saving")
+    }
+
+    const File = new FormData()
+    File.append("image",fileData)
+
+
     try {
-      const res = await Requestbase.post("/api/users/createShop",{price , amount, describe, name,image : srcImage},{
+      const Url = await Requestbase.post("single",File)
+ 
+      const res = await Requestbase.post("/api/users/createShop",{price , amount, describe, name, image : Url.data.img},{
         headers : {
           token : User.token
         }
       })
 
-      console.log(res.data);
+      if(res.data.success){
+        setNewProduct({
+          image : "",
+          name : "",
+          price : "",
+          describe : "",
+          amount : ""
+        })
+        toast.success("Add product done !")
+      }
 
     } catch (error) {
       toast.warning(error.response.data.message)
@@ -69,9 +86,9 @@ const AddProduct = () => {
           <label htmlFor='#imgUpload'>
             Product Image
           </label>
-          <input onChange={fileChange} type="file" id="imgUpload" />
+          <input onChange={fileChange} onClick={() => setUrlFile("") } type="file" id="imgUpload" />
           {
-            srcImage &&  <img className='srcImage' src={srcImage} alt="imgUpload" />
+            Urlfile &&  <img className='srcImage' src={Urlfile} alt="imgUpload" />
           }
           <label htmlFor='#name'>
             Product Name

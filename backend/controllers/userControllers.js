@@ -286,7 +286,24 @@ export const UpdatePassword = async(req,res,next) =>{
     }
 }
 
-export const createShop = async(req,res,next) => {
-    console.log(req.body);
-    res.send("ok")
+export const UpdoadShop = async(req,res,next) => {
+    try {
+        const user = await userModel.findById({_id : req.user._id})
+
+        if(!user){
+            res.status(400)
+            throw new Error("User not found")
+        }
+
+        Object.assign(user,{
+            ...user, shop : [...user.shop,req.body] 
+        })
+
+        user.save()
+
+        res.status(200).json({success : true})
+    } catch (error) {
+        res.status(400)
+        next(error)
+    }
 }
