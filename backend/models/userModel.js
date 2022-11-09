@@ -32,7 +32,10 @@ const userShema = mongoose.Schema({
         required : [true, "Please add your phone"]
     },
     shop :[{
-            image : String,
+            image :{
+                type : String,
+                default : "https://i.ibb.Co/4pDNDk1/avatar.png"
+            },
             name : String,
             price : Number,
             describe : String,

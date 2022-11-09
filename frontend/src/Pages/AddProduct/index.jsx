@@ -20,7 +20,16 @@ const AddProduct = () => {
   const [Urlfile, setUrlFile] = useState();
 
   const fileChange = (e) =>{
+    if(!e.target.files[0]){
+      return
+    }
+
+    if(!e.target.files[0].type.includes("image")){
+      return toast.warning("File support jpeg, png, jpg")
+    }
+
     setUrlFile(URL.createObjectURL(e.target.files[0]));
+
     setFileData(e.target.files[0])
   }
 
@@ -47,18 +56,24 @@ const AddProduct = () => {
       return toast.warning("Fill in all information before saving")
     }
 
+    if(!fileData.type.includes("image")) {
+      return toast.warning("File support jpeg, png, jpg")
+    }
+
     const File = new FormData()
     File.append("image",fileData)
 
 
     try {
       const Url = await Requestbase.post("single",File)
+      console.log(Url.data.img)
  
       const res = await Requestbase.post("/api/users/createShop",{price , amount, describe, name, image : Url.data.img},{
         headers : {
           token : User.token
         }
       })
+
 
       if(res.data.success){
         setNewProduct({
@@ -68,6 +83,7 @@ const AddProduct = () => {
           describe : "",
           amount : ""
         })
+        setUrlFile("")
         toast.success("Add product done !")
       }
 
@@ -75,6 +91,7 @@ const AddProduct = () => {
       toast.warning(error.response.data.message)
     }
   }
+
 
   return (
     <div className='MainAddProduct'>
@@ -93,22 +110,22 @@ const AddProduct = () => {
           <label htmlFor='#name'>
             Product Name
           </label>
-          <input onChange={handleChangInput} type="text" id="name" placeholder='Name Product' />
+          <input onChange={handleChangInput} value={NewPropduct.name} type="text" id="name" placeholder='Name Product' />
 
           <label htmlFor='#price'>
             Product price
           </label>
-          <input onChange={handleChangInput} type="text" id="price" placeholder='Price Product' />
+          <input onChange={handleChangInput} value={NewPropduct.price}  type="text" id="price" placeholder='Price Product' />
 
           <label htmlFor='#amount'>
             Product Amount
           </label>
-          <input onChange={handleChangInput} type="text" id="amount" placeholder='Product Amount'/>
+          <input onChange={handleChangInput} type="text" value={NewPropduct.amount} id="amount" placeholder='Product Amount'/>
 
           <label htmlFor='#describe'>
             Product Description
           </label>
-          <input onChange={handleChangInput} type="text" id="describe" placeholder='Product Description'/>
+          <input onChange={handleChangInput} type="text" value={NewPropduct.describe} id="describe" placeholder='Product Description'/>
           <button>Submit</button>
         </form>
        </div>
