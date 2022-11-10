@@ -8,13 +8,20 @@ import { update } from '../../Redux/SliceRedux/user'
 import Requestbase from '../../utils/request'
 import ContenerDashboard from './ContenerDashboard'
 import "./Dashboard.css"
+import EditProduct from './EditProduct'
 import PaginationProducts from './PaginationProducts'
 
 const Dashboard = () => {
   const User = useSelector((state) => state.Token)
   const Dispatch = useDispatch()
-
   const [Products,setProduct] = useState([])
+  const [EditProductState,setditProductState] = useState(false)
+
+  const [product,setproduct] = useState({})
+
+  const handleChange = () => {
+    setditProductState(!EditProductState)
+  }
   
   const getDataUser = async() =>{
     try {
@@ -52,9 +59,12 @@ const Dashboard = () => {
               <button>All Categories ({User.shop.length})</button>
             </div>
           </div>
-          <ContenerDashboard Products={Products} getDataUser={getDataUser} setProduct={setProduct} />
+          <ContenerDashboard setditProductState={setditProductState} EditProductState={EditProductState} setproduct={setproduct}  Products={Products} getDataUser={getDataUser} setProduct={setProduct} />
           <PaginationProducts shop={User.shop} setProduct={setProduct} />
       </div>
+      {
+        EditProductState && <EditProduct handleChange={handleChange} product={product} />
+      }
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ProductsDashboard from './ProductsDashboard'
 
-const ContenerDashboard = ({Products,setProduct,getDataUser}) => {
+const ContenerDashboard = ({Products,setProduct,getDataUser,setproduct,EditProductState,setditProductState}) => {
     const [Search,setSearch] = useState("")
 
     const handleSubmit = (e) => {
@@ -51,7 +51,7 @@ const ContenerDashboard = ({Products,setProduct,getDataUser}) => {
                     </tr>
                     {
                         Products.map((product,index) => {
-                            return <ProductsDashboard Id={index + 1} product={product} key={index} />
+                            return <ProductsDashboard EditProductState={EditProductState} setditProductState={setditProductState}  setproduct={setproduct}  Id={index + 1} product={product} key={index} />
                         })
                     }
                 </table>

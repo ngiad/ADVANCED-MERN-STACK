@@ -1,11 +1,14 @@
 import React from 'react'
 
-const ProductsDashboard = ({product,Id}) => {
+
+const ProductsDashboard = ({product,Id,setproduct,setditProductState,EditProductState}) => {
     const handleClick = (e) => {
         if(e.detail === 2){
-            console.log('double click');
+          setditProductState(!EditProductState)
+          setproduct(product)
         }
     }
+
   return (
     <tr className='Product' onClick={handleClick}>
         <th>{Id}</th>

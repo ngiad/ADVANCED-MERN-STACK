@@ -1,5 +1,6 @@
 .DashboardContent{
     font-family: 'Be Vietnam Pro';
+    position: relative;
 }
 
 .topDashboardContent{
@@ -125,3 +126,87 @@
   .Product{
     cursor: pointer;
   }
+
+  .EditProduct{
+    padding: 12px;
+    background-color: #fff;
+    font-family: 'Be Vietnam Pro';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  .EditProduct > form{
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .EditProduct > form input{
+    width: 300px;
+    padding: 8px;
+    margin: 12px 0;
+  }
+
+  .shadow-drop-center {
+    -webkit-animation: shadow-drop-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: shadow-drop-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  @-webkit-keyframes shadow-drop-center {
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+              box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+              box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+    }
+  }
+  @keyframes shadow-drop-center {
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+              box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+              box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  .buttonFormEdit{
+    display: flex;
+  }
+
+  .buttonFormEdit button:nth-child(1){
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: #32963d;
+    color: #fff;
+    margin-right: 4px;
+    border-radius: 4px;
+  }
+
+  .buttonFormEdit button:nth-child(2){
+    flex: 1;
+    padding: 8px;
+    background-color: red;
+    border: none;
+    color: #fff;
+    margin-left: 4px;
+    border-radius: 4px;
+  }
+
+  .closeEditProduct{
+    position: absolute;
+    right: 10px;
+    top: 4px;
+    padding: 8px;
+    font-size: 20px;
+    border: none;
+    background-color: #fff;
+  }
+  

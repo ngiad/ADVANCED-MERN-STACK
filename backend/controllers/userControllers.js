@@ -309,3 +309,9 @@ export const UpdoadShop = async(req,res,next) => {
         next(error)
     }
 }
+
+
+export const UpdateProduct = async(req,res,next) => {
+    console.log(req.body)
+    res.send("ok")
+}
