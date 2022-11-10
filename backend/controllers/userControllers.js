@@ -4,377 +4,395 @@ import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import { response } from "express";
 
-
 const generateToken = (id) => {
-    return jwt.sign({id},process.env.JWT_SECRET,{
-        expiresIn : "1d"
-    })
-}
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
+};
 
+export const registerUser = async (req, res, next) => {
+  try {
+    const { name, email, password, phone } = req.body;
 
- 
-
-export const registerUser = async(req,res,next) => {
-    try {
-        const {name,email,password,phone} = req.body
-
-        if(!name || !email || !password || !phone){
-            res.status(400)
-            throw new Error("Please fill in all required fields")
-        }
-
-        if(password.length < 6){
-            res.status(400)
-            throw new Error("Password must be up to 6 characters")
-        }
-
-        const userExits = await userModel.findOne({email : email})
-
-        if(userExits){
-            res.status(400)
-            throw new Error("Email has already been registered")
-        }
-
-
-        const user = await userModel.create({
-            name,
-            email,
-            password,
-            phone
-        })
-
-        // Genereta Token
-        const token = generateToken(user._id)
-
-
-        // Send HTTP-only cookie
-        res.cookie("token", token,{
-            path : "/",
-            httpOnly : true,
-            expires :  new Date(Date.now() + 1000 * 86400), // 1 day
-            sameSite : "none",
-            secure : true
-        })
-
-
-        if(user){
-            const {_id, name ,shop, email ,photo , phone , bio} = user
-            
-            res.status(201).json({
-                _id,
-                name,
-                email,
-                photo,
-                phone,
-                token,
-                shop,
-                bio
-            })
-
-        }else{
-            res.status(400)
-            throw new Error("Invalid user data")
-        }
-    } catch (error) {
-        res.status(400)
-        next(error)
+    if (!name || !email || !password || !phone) {
+      res.status(400);
+      throw new Error("Please fill in all required fields");
     }
-}
 
-export const loginUser = async(req,res,next) => {
-    try {
-        const { email , password} = req.body
-
-        // Validate Request
-        if(!email || !password){
-            res.status(400)
-            throw new Error("Please add email and pasword")
-        }
-
-        const user = await userModel.findOne({email})
-
-        if(!user){
-            res.status(400)
-            throw new Error("User not found,please signup")
-        }
-
-        const passwordIsCorrect = await bcrypt.compare(password,user.password)
-
-        // Genereta Token
-        const token = generateToken(user._id)
-
-
-        // Send HTTP-only cookie
-        res.cookie("token", token,{
-            path : "/",
-            httpOnly : true,
-            expires :  new Date(Date.now() + 1000 * 86400), // 1 day
-            sameSite : "none",
-            secure : true
-        })
-
-        if(user && passwordIsCorrect) {
-            const {_id, shop, name , email ,photo , phone , bio} = user
-            
-            res.status(200).json({
-                _id,
-                name,
-                email,
-                photo,
-                phone,
-                token,
-                shop,
-                bio
-            })
-        }else{
-            res.status(400)
-            throw new Error("Invalid user data")
-        }
-    } catch (error) {
-        res.status(400)
-        next(error)
+    if (password.length < 6) {
+      res.status(400);
+      throw new Error("Password must be up to 6 characters");
     }
-}
 
-export const logout = async(req,res,next) => {
-    try {
-        res.cookie("token", "",{
-            path : "/",
-            httpOnly : true,
-            expires :  new Date(0), 
-            sameSite : "none",
-            secure : true
-        })
+    const userExits = await userModel.findOne({ email: email });
 
-        return res.status(200).json({
-            message : "Successfully Logged Out"
-        })
-    } catch (error) {
-        res.status(400)
-        next(error)
+    if (userExits) {
+      res.status(400);
+      throw new Error("Email has already been registered");
     }
-}
 
-export const getUser =  async(req,res,next) => {
-    try {
-        const user = await userModel.findById(req.user._id)
+    const user = await userModel.create({
+      name,
+      email,
+      password,
+      phone,
+    });
 
-        if(user){
-            const {_id, name , email ,photo , phone , bio ,shop} = user
-            
-            res.status(200).json({
-                _id,
-                name,
-                email,
-                photo,
-                phone,
-                shop,
-                token : req.token,
-                bio
-            })
-        }else{
-            res.status(400)
-            throw new Error("User not found")
+    // Genereta Token
+    const token = generateToken(user._id);
+
+    // Send HTTP-only cookie
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000 * 86400), // 1 day
+      sameSite: "none",
+      secure: true,
+    });
+
+    if (user) {
+      const { _id, name, shop, email, photo, phone, bio } = user;
+
+      res.status(201).json({
+        _id,
+        name,
+        email,
+        photo,
+        phone,
+        token,
+        shop,
+        bio,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate Request
+    if (!email || !password) {
+      res.status(400);
+      throw new Error("Please add email and pasword");
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found,please signup");
+    }
+
+    const passwordIsCorrect = await bcrypt.compare(password, user.password);
+
+    // Genereta Token
+    const token = generateToken(user._id);
+
+    // Send HTTP-only cookie
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000 * 86400), // 1 day
+      sameSite: "none",
+      secure: true,
+    });
+
+    if (user && passwordIsCorrect) {
+      const { _id, shop, name, email, photo, phone, bio } = user;
+
+      res.status(200).json({
+        _id,
+        name,
+        email,
+        photo,
+        phone,
+        token,
+        shop,
+        bio,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.cookie("token", "", {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(0),
+      sameSite: "none",
+      secure: true,
+    });
+
+    return res.status(200).json({
+      message: "Successfully Logged Out",
+    });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user._id);
+
+    if (user) {
+      const { _id, name, email, photo, phone, bio, shop } = user;
+
+      res.status(200).json({
+        _id,
+        name,
+        email,
+        photo,
+        phone,
+        shop,
+        token: req.token,
+        bio,
+      });
+    } else {
+      res.status(400);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const loginStauts = async (req, res, next) => {
+  try {
+    const token = req.headers.token;
+
+    if (!token) {
+      return res.json({ login: false });
+    }
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!verified) {
+      res.status(400);
+      throw new Error("User not found");
+    } else {
+      res.status(200).json({ login: true });
+    }
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const ForgotPassword = async (req, res, next) => {
+  try {
+    const user = await userModel.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
+    }
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: "devwebdainghia@gmail.com",
+        pass: "imhfjpfebidvwoet",
+      },
+    });
+
+    const token = generateToken(user._id);
+
+    await transporter.sendMail(
+      {
+        from: "devwebdainghia@gmail.com",
+        to: `${user.email}`,
+        subject: "Forgot Password",
+        text: `Forgot Password at url ${
+          "http://localhost:3000/forgotPassword/" + token
+        } one day limit`,
+      },
+      (err) => {
+        if (err) {
+          res.status(400);
+          throw new Error("Email not found");
         }
-    } catch (error) {
-        res.status(400)
-        next(error)
+      }
+    );
+    res.json({ success: true });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const UpdatePassword = async (req, res, next) => {
+  const { token, password, confirmPassword } = req.body;
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findById({ _id: verified.id });
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
     }
-}
 
-
-export const loginStauts = async(req,res,next) =>{
-    try {
-        const token = req.headers.token
-
-        if(!token){
-            return res.json({login : false})
-        }
-
-        const verified = jwt.verify(token, process.env.JWT_SECRET)
-
-        if(!verified){
-            res.status(400)
-            throw new Error("User not found")
-        }else{
-            res.status(200).json({login : true})
-        }
-
-    } catch (error) {
-        res.status(400)
-        next(error)
+    if (password !== confirmPassword) {
+      res.status(400);
+      throw new Error("Check confirm password");
     }
-}
 
-export const ForgotPassword = async(req,res,next) =>{
-    try {
-        const user = await userModel.findOne({email : req.body.email})
-        if(!user){
-            res.status(400)
-            throw new Error("User not found")
-        }
-        const transporter = nodemailer.createTransport({
-            service: "Gmail",
-            auth: {
-              user: "devwebdainghia@gmail.com",
-              pass: "imhfjpfebidvwoet",
-            },
-          });
-        
-        const token = generateToken(user._id)
+    Object.assign(user, {
+      ...user,
+      password: password,
+    });
 
-        await transporter.sendMail(
-            {
-              from: "devwebdainghia@gmail.com",
-              to: `${user.email}`,
-              subject: "Forgot Password",
-              text: `Forgot Password at url ${"http://localhost:3000/forgotPassword/"+token} one day limit`,
-            },
-            (err) => {
-              if (err){
-                res.status(400)
-                throw new Error("Email not found")
-              }
-            }
-          );  
-         res.json({success : true}) 
-    } catch (error) {
-        res.status(400)
-        next(error);
+    user.save();
+
+    const { _id, name, email, photo, phone, bio, shop } = user;
+
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000 * 86400), // 1 day
+      sameSite: "none",
+      secure: true,
+    });
+
+    res.status(200).json({
+      name,
+      email,
+      photo,
+      phone,
+      bio,
+      token,
+      shop,
+      _id,
+    });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
+
+export const UpdoadShop = async (req, res, next) => {
+  try {
+    const user = await userModel.findById({ _id: req.user._id });
+
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
     }
-}
 
-export const UpdatePassword = async(req,res,next) =>{
-    const { token,password,confirmPassword } = req.body
-    try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET)
+    Object.assign(user, {
+      ...user,
+      shop: [...user.shop, req.body],
+    });
 
-        const user = await userModel.findById({_id : verified.id})
+    user.save();
 
-        if(!user){
-            res.status(400)
-            throw new Error("User not found")
-        }
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
 
-        if(password !== confirmPassword){
-            res.status(400)
-            throw new Error("Check confirm password")
-        }
-        
+export const UpdateProduct = async (req, res, next) => {
+  const shopUpdate = req.user.shop.map((item) => {
+    return String(item._id) === req.body._id ? req.body : item;
+  });
 
-        Object.assign(user,{
-            ...user,password : password
-        })
+  const Update = { ...req.user, shop: shopUpdate };
 
-        user.save()
+  try {
+    const userUpdate = await userModel.findById({ _id: req.user._id });
 
-        const { _id, name , email ,photo , phone , bio, shop } = user
-        
-        res.cookie("token", token,{
-            path : "/",
-            httpOnly : true,
-            expires :  new Date(Date.now() + 1000 * 86400), // 1 day
-            sameSite : "none",
-            secure : true
-        })
+    Object.assign(userUpdate, Update);
+    await userUpdate.save();
 
-        res.status(200).json({
-            name , email ,photo , phone , bio, token, shop, _id
-        })
+    const { _id, name, email, photo, phone, bio, shop } = userUpdate;
 
+    res.status(200).json({
+      name,
+      email,
+      photo,
+      phone,
+      bio,
+      token: req.token,
+      shop,
+      _id,
+    });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
 
-    } catch (error) {
-        res.status(400)
-        next(error);
-    }
-}
+export const DeleteProduct = async (req, res, next) => {
+  const shopUpdate = req.user.shop.filter((item) => {
+    return String(item._id) !== req.body._id;
+  });
+  const Update = { ...req.user, shop: shopUpdate };
 
-export const UpdoadShop = async(req,res,next) => {
-    try {
-        const user = await userModel.findById({_id : req.user._id})
+  try {
+    const userUpdate = await userModel.findById({ _id: req.user._id });
 
-        if(!user){
-            res.status(400)
-            throw new Error("User not found")
-        }
+    Object.assign(userUpdate, Update);
+    await userUpdate.save();
 
-        Object.assign(user,{
-            ...user, shop : [...user.shop,req.body] 
-        })
+    const { _id, name, email, photo, phone, bio, shop } = userUpdate;
 
-        user.save()
+    res.status(200).json({
+      name,
+      email,
+      photo,
+      phone,
+      bio,
+      token: req.token,
+      shop,
+      _id,
+    });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
 
-        res.status(200).json({success : true})
-    } catch (error) {
-        res.status(400)
-        next(error)
-    }
-}
+export const UpdateProfile = async (req, res, next) => {
+  const token = req.token;
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      { _id: req.user._id },
+      req.body,
+      { new: true }
+    );
+    await user.save();
 
+    const { name, email, photo, phone, bio, shop, _id } = user;
 
-export const UpdateProduct = async(req,res,next) => {
-    const shopUpdate = req.user.shop.map((item) => {
-        return String(item._id) === req.body._id ? req.body : item
-    })
-
-    const Update = {...req.user,shop : shopUpdate}
-
-    try {
-        const userUpdate = await userModel.findById({_id : req.user._id})
-        
-        Object.assign(userUpdate,Update)
-        await userUpdate.save()
-
-        const { _id, name , email ,photo , phone , bio, shop } = userUpdate
-
-        res.status(200).json({
-            name , email ,photo , phone , bio, token : req.token, shop, _id
-        })
-        
-    } catch (error) {
-        res.status(400)
-        next(error)
-    }
-}
-
-export const DeleteProduct = async(req,res,next) => {
-    const shopUpdate = req.user.shop.filter((item) => {
-        return String(item._id) !== req.body._id
-    })
-    const Update = {...req.user,shop : shopUpdate}
-
-    try {
-        const userUpdate = await userModel.findById({_id : req.user._id})
-        
-        Object.assign(userUpdate,Update)
-        await userUpdate.save()
-
-        const { _id, name , email ,photo , phone , bio, shop } = userUpdate
-
-        res.status(200).json({
-            name , email ,photo , phone , bio, token : req.token, shop, _id
-        })
-        
-    } catch (error) {
-        res.status(400)
-        next(error)
-    }
-}
-
-
-export const UpdateProfile = async(req,res,next) => {
-    const token = req.token
-    try {
-        const user = await userModel.findByIdAndUpdate({_id : req.user._id},req.body,{new : true})
-        await user.save()
-
-        const { name , email ,photo , phone , bio, shop, _id } = user
-
-        res.status(200).json({
-            name , email ,photo , phone , bio, token, shop, _id
-        })
-    } catch (error) {
-        res.status(400)
-        next(error)
-    }
-}
+    res.status(200).json({
+      name,
+      email,
+      photo,
+      phone,
+      bio,
+      token,
+      shop,
+      _id,
+    });
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+};
