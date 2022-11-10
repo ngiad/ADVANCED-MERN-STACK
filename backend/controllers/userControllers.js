@@ -159,7 +159,7 @@ export const getUser =  async(req,res,next) => {
         const user = await userModel.findById(req.user._id)
 
         if(user){
-            const {_id, name , email ,photo , phone , bio} = user
+            const {_id, name , email ,photo , phone , bio ,shop} = user
             
             res.status(200).json({
                 _id,
@@ -167,6 +167,8 @@ export const getUser =  async(req,res,next) => {
                 email,
                 photo,
                 phone,
+                shop,
+                token : req.token,
                 bio
             })
         }else{

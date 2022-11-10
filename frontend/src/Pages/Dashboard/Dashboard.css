@@ -1,0 +1,127 @@
+.DashboardContent{
+    font-family: 'Be Vietnam Pro';
+}
+
+.topDashboardContent{
+    padding: 12px 12px;
+    border-bottom: 1px solid #ccc ;
+}
+
+.info-summary{
+    margin: 12px 0;
+}
+
+.info-summary button{
+    width: 220px;
+    height: 70px;
+    margin-right: 12px;
+    transition: all 0.2s;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.info-summary button:nth-child(1){
+    background-color: #b624ff;
+}
+
+.info-summary button:nth-child(2){
+    background-color: #32963d;
+}
+
+.info-summary button:nth-child(3){
+    background-color: #c41849;
+}
+
+.info-summary button:nth-child(4){
+    background-color: #03a5fc;
+}
+
+
+.info-summary button:hover{
+    transform: translateY(-5px);
+}
+
+.mainContenerDashboard{
+    padding: 12px 12px;
+}
+
+.topContenerDashboard{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topContenerDashboard > form input{
+    padding: 8px 24px;
+    border-radius: 4px;
+}
+
+.customers{
+    margin: 12px 0;
+}
+
+#customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  #customers tr{
+    display: flex;
+    width: 100%;
+  }
+
+  #customers tr th{
+    flex: 1;
+    height: 80px;
+    text-align: center;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+  }
+
+  #customers tr:nth-child(1){
+    background-color: #04AA6D;
+  }
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #customers tr:hover {background-color: #ddd;}
+
+  #customers tr:nth-child(1):hover{
+    background-color: #04AA6D;
+  }
+  
+  #customers th {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    color: #333;
+  }
+
+  #customers tr th img{
+    width: 60px;
+  }
+
+  #description{
+    -webkit-box-orient: vertical;
+    cursor: default;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    color: #555;
+    font-size: 14px;
+    line-height: 22px;
+    line-height: 1.6;
+    margin: 15px 0;
+    padding: 0 15px;
+    text-align: justify;
+  }
+
+  .Product{
+    cursor: pointer;
+  }
