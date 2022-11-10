@@ -2,6 +2,7 @@ import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
+import { response } from "express";
 
 
 const generateToken = (id) => {
@@ -267,7 +268,7 @@ export const UpdatePassword = async(req,res,next) =>{
 
         user.save()
 
-        const { name , email ,photo , phone , bio, shop } = user
+        const { _id, name , email ,photo , phone , bio, shop } = user
         
         res.cookie("token", token,{
             path : "/",
@@ -278,7 +279,7 @@ export const UpdatePassword = async(req,res,next) =>{
         })
 
         res.status(200).json({
-            name , email ,photo , phone , bio, token, shop
+            name , email ,photo , phone , bio, token, shop, _id
         })
 
 
@@ -324,10 +325,10 @@ export const UpdateProduct = async(req,res,next) => {
         Object.assign(userUpdate,Update)
         await userUpdate.save()
 
-        const { name , email ,photo , phone , bio, shop } = userUpdate
+        const { _id, name , email ,photo , phone , bio, shop } = userUpdate
 
         res.status(200).json({
-            name , email ,photo , phone , bio, token : req.token, shop
+            name , email ,photo , phone , bio, token : req.token, shop, _id
         })
         
     } catch (error) {
@@ -348,12 +349,30 @@ export const DeleteProduct = async(req,res,next) => {
         Object.assign(userUpdate,Update)
         await userUpdate.save()
 
-        const { name , email ,photo , phone , bio, shop } = userUpdate
+        const { _id, name , email ,photo , phone , bio, shop } = userUpdate
 
         res.status(200).json({
-            name , email ,photo , phone , bio, token : req.token, shop
+            name , email ,photo , phone , bio, token : req.token, shop, _id
         })
         
+    } catch (error) {
+        res.status(400)
+        next(error)
+    }
+}
+
+
+export const UpdateProfile = async(req,res,next) => {
+    const token = req.token
+    try {
+        const user = await userModel.findByIdAndUpdate({_id : req.user._id},req.body,{new : true})
+        await user.save()
+
+        const { name , email ,photo , phone , bio, shop, _id } = user
+
+        res.status(200).json({
+            name , email ,photo , phone , bio, token, shop, _id
+        })
     } catch (error) {
         res.status(400)
         next(error)

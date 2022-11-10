@@ -9,7 +9,7 @@ import Requestbase from '../../utils/request'
 import ContenerDashboard from './ContenerDashboard'
 import "./Dashboard.css"
 import EditProduct from './EditProduct'
-import PaginationProducts from './PaginationProducts'
+
 
 const Dashboard = () => {
   const User = useSelector((state) => state.Token)
@@ -60,7 +60,7 @@ const Dashboard = () => {
             </div>
           </div>
           <ContenerDashboard setditProductState={setditProductState} EditProductState={EditProductState} setproduct={setproduct}  Products={Products} getDataUser={getDataUser} setProduct={setProduct} />
-          <PaginationProducts shop={User.shop} setProduct={setProduct} />
+          {/* <PaginationProducts shop={User.shop} setProduct={setProduct} /> */}
       </div>
       {
         EditProductState && <EditProduct setProduct={setProduct} handleChange={handleChange} product={product} />
