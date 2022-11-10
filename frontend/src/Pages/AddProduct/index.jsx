@@ -66,7 +66,6 @@ const AddProduct = () => {
 
     try {
       const Url = await Requestbase.post("single",File)
-      console.log(Url.data.img)
  
       const res = await Requestbase.post("/api/users/createShop",{price , amount, describe, name, image : Url.data.img},{
         headers : {

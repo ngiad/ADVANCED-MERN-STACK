@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { update } from '../../Redux/SliceRedux/user'
+import Requestbase from '../../utils/request'
 
-const EditProduct = ({product,handleChange}) => {
+const EditProduct = ({product,handleChange,setProduct}) => {
+  const User = useSelector((state) => state.Token)
+  const Dispatch = useDispatch()
   const [Edit,setEdit] = useState({})
 
   const [fileData,setFileData] = useState()
@@ -36,8 +41,60 @@ const EditProduct = ({product,handleChange}) => {
 
   const handleSubmit = async(e) => {
     e.preventDefault()
-    console.log(Edit._id)
-    console.log(fileData)
+
+    if(!fileData){
+      try {
+        const res = await Requestbase.post("api/users/updateproduct",Edit,{
+          headers : {
+            token : User.token
+          }
+        })
+
+        Dispatch(update(res.data))
+        setProduct(res.data.shop)
+        handleChange()
+        return toast.success("Update product done !!")
+      } catch (error) {
+        toast.warning(error.response.data.message)
+      }
+    }
+
+    const File = new FormData()
+    File.append("image",fileData)
+
+    try {
+      const Url = await Requestbase.post("single",File)
+
+      const res = await Requestbase.post("api/users/updateproduct",{...Edit,image : Url.data.img},{
+        headers : {
+          token : User.token
+        }
+      })
+
+      Dispatch(update(res.data))
+      setProduct(res.data.shop)
+      handleChange()
+      return toast.success("Update product done !!")
+    } catch (error) {
+      toast.warning(error.response.data.message)
+    }
+  }
+
+  const handleDelete = async() => {
+    try {
+      const res = await Requestbase.post("api/users/deleteproduct",Edit,{
+        headers : {
+          token : User.token
+        }
+      })
+
+      Dispatch(update(res.data))
+      setProduct(res.data.shop)
+      handleChange()
+      return toast.success("Delete product done !!")
+    } catch (error) {
+      toast.warning(error.response.data.message)
+    }
   }
 
   return (
@@ -73,11 +130,11 @@ const EditProduct = ({product,handleChange}) => {
             Product Description
           </label>
           <input onChange={handleChangInput} type="text" value={Edit.describe} id="describe" placeholder='Product Description'/>
-          <div className="buttonFormEdit">
-            <button>Save</button>
-            <button>Delete</button>
-          </div>
         </form>
+        <div className="buttonFormEdit">
+            <button onClick={handleSubmit}>Save</button>
+            <button onClick={handleDelete}>Delete</button>
+        </div>
     </div>
   )
 }

@@ -54,7 +54,7 @@ const Dashboard = () => {
             <h2>Inventory Stats</h2>
             <div className="info-summary">
               <button>Total Products ({User.shop.reduce((total,num) =>  total + num.amount,0)})</button>
-              <button>Total Store Value ({User.shop.reduce((total,num) =>  total + num.price,0)} đ)</button>
+              <button>Total Store Value ({new Intl.NumberFormat().format(User.shop.reduce((total,num) =>  total + (num.price*num.amount),0))} đ)</button>
               <button>Out of Stock ({User.shop.filter((product) => product.amount === 0).length})</button>
               <button>All Categories ({User.shop.length})</button>
             </div>
@@ -63,7 +63,7 @@ const Dashboard = () => {
           <PaginationProducts shop={User.shop} setProduct={setProduct} />
       </div>
       {
-        EditProductState && <EditProduct handleChange={handleChange} product={product} />
+        EditProductState && <EditProduct setProduct={setProduct} handleChange={handleChange} product={product} />
       }
     </div>
   )

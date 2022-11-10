@@ -312,6 +312,50 @@ export const UpdoadShop = async(req,res,next) => {
 
 
 export const UpdateProduct = async(req,res,next) => {
-    console.log(req.body)
-    res.send("ok")
+    const shopUpdate = req.user.shop.map((item) => {
+        return String(item._id) === req.body._id ? req.body : item
+    })
+
+    const Update = {...req.user,shop : shopUpdate}
+
+    try {
+        const userUpdate = await userModel.findById({_id : req.user._id})
+        
+        Object.assign(userUpdate,Update)
+        await userUpdate.save()
+
+        const { name , email ,photo , phone , bio, shop } = userUpdate
+
+        res.status(200).json({
+            name , email ,photo , phone , bio, token : req.token, shop
+        })
+        
+    } catch (error) {
+        res.status(400)
+        next(error)
+    }
+}
+
+export const DeleteProduct = async(req,res,next) => {
+    const shopUpdate = req.user.shop.filter((item) => {
+        return String(item._id) !== req.body._id
+    })
+    const Update = {...req.user,shop : shopUpdate}
+
+    try {
+        const userUpdate = await userModel.findById({_id : req.user._id})
+        
+        Object.assign(userUpdate,Update)
+        await userUpdate.save()
+
+        const { name , email ,photo , phone , bio, shop } = userUpdate
+
+        res.status(200).json({
+            name , email ,photo , phone , bio, token : req.token, shop
+        })
+        
+    } catch (error) {
+        res.status(400)
+        next(error)
+    }
 }
