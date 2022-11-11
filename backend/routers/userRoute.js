@@ -1,5 +1,5 @@
 import express from "express"
-import { getUser, loginUser, logout, registerUser,loginStauts, ForgotPassword, UpdatePassword, UpdoadShop, UpdateProduct, DeleteProduct, UpdateProfile } from "../controllers/userControllers.js"
+import { getUser, loginUser, logout, registerUser,loginStauts, ForgotPassword, UpdatePassword, UpdoadShop, UpdateProduct, DeleteProduct, UpdateProfile, sendMailReportbug } from "../controllers/userControllers.js"
 import { protect } from "../middleWare/authMiddleware.js"
 
 const router = express.Router()
@@ -15,5 +15,6 @@ router.post("/createShop",protect,UpdoadShop)
 router.post("/updateproduct",protect,UpdateProduct)
 router.post("/deleteproduct",protect,DeleteProduct)
 router.post("/updateprofile",protect,UpdateProfile)
+router.post("/reportbug",protect, sendMailReportbug)
 
 export default router

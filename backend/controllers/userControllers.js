@@ -2,13 +2,21 @@ import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
-import { response } from "express";
+
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: "devwebdainghia@gmail.com",
+    pass: "sizufgpautxquusa",
+  },
+});
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -202,13 +210,6 @@ export const ForgotPassword = async (req, res, next) => {
       res.status(400);
       throw new Error("User not found");
     }
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: "devwebdainghia@gmail.com",
-        pass: "imhfjpfebidvwoet",
-      },
-    });
 
     const token = generateToken(user._id);
 
@@ -396,3 +397,32 @@ export const UpdateProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+export const sendMailReportbug = async(req,res,next) => {
+  const { email } = req.user
+  const {subject,message} = req.body
+  try {
+
+    await transporter.sendMail(
+      {
+        from: "devwebdainghia@gmail.com",
+        to: `devwebdainghia@gmail.com`,
+        subject: `Name Report bug ${subject} . Email : ${email} `,
+        text: `${message}`,
+      },
+      (err) => {
+        if (err) {
+          console.log(err)
+          res.status(400);
+          throw new Error("Email not found");
+        }
+      }
+    )
+    
+    res.json({ success: true });
+    
+  } catch (error) {
+    res.status(400);
+    next(error);
+  }
+}

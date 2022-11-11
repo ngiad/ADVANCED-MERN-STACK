@@ -1,0 +1,68 @@
+.MainReportBug{
+    font-family: 'Be Vietnam Pro';
+}
+
+.titleReportBug{
+    margin: 12px 0;
+}
+
+.Contactus{
+    display: flex;
+}
+
+.Contactus form{
+    display: flex;
+    flex-direction: column;
+}
+
+.Contactus form textarea{
+    width: 100%;
+    height: 300px;
+    padding: 8px;
+    width: 450px;
+    font-size: 16px;
+    resize : none;
+    font-family: 'Be Vietnam Pro';
+}
+
+.Card_card__ReportBug {
+    margin-left: 24px;
+    padding: 20px;
+    background-color: #1f93ff;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.bottomCardReportBug{
+    margin: 96px 0;
+}
+
+.bottomCardReportBug p{
+    margin: 8px 0;
+}
+
+.Card_card__ReportBug h2{
+    margin-bottom: 12px;
+}
+
+.Card_card__ReportBug p{
+    font-size: 18px;
+}
+
+.Contactus form label{
+    margin: 16px 0;
+    font-weight: 600;
+}
+
+.Contactus form input {
+    padding: 8px;
+}
+
+.Contactus form button{
+    padding: 8px;
+    background-color: black;
+    color: #fff;
+    border-radius: 4px;
+    margin-top: 16px;
+    cursor: pointer;
+}
