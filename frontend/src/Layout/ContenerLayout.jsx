@@ -21,6 +21,7 @@ const ContenerLayout = () => {
       })
   
       const data = await res.data
+
       
       if(!data.login){
         return Navigate("/")
@@ -34,6 +35,7 @@ const ContenerLayout = () => {
   useEffect(() => {
     handleLoginStatus()
   },[])
+
   return (
     <div className='MainContenerLayout'>
         <NavigateContener />

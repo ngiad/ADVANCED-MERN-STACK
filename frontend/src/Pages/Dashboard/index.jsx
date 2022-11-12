@@ -43,7 +43,9 @@ const Dashboard = () => {
     getDataUser();
   }, []);
 
-  return (
+// if(User.shop) 
+
+return (
     <div>
       <HeaderContener />
       <div className="DashboardContent">
@@ -52,12 +54,12 @@ const Dashboard = () => {
           <div className="info-summary">
             <button>
               Total Products (
-              {User.shop.reduce((total, num) => total + num.amount, 0)})
+              {User.shop?.reduce((total, num) => total + num.amount, 0)})
             </button>
             <button>
               Total Store Value (
-              {new Intl.NumberFormat().format(
-                User.shop.reduce(
+              { new Intl.NumberFormat().format(
+                User.shop?.reduce(
                   (total, num) => total + num.price * num.amount,
                   0
                 )
@@ -66,9 +68,9 @@ const Dashboard = () => {
             </button>
             <button>
               Out of Stock (
-              {User.shop.filter((product) => product.amount === 0).length})
+              {User.shop?.filter((product) => product.amount === 0).length})
             </button>
-            <button>All Categories ({User.shop.length})</button>
+            <button>All Categories ({User.shop?.length})</button>
           </div>
         </div>
         <ContenerDashboard
