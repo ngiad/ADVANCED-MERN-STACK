@@ -39,7 +39,10 @@ const Login = () => {
         },
       });
 
+      console.log(document.cookie)
+
       const data = await res.data;
+   
 
       Dispatch(update(data));
       if (data) {
